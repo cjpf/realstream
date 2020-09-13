@@ -4,7 +4,6 @@ from twitchAPI.types import AuthScope
 from twitchAPI.webhook import TwitchWebHook
 from pprint import pprint
 from callbacks import callback_ban_changed, callback_mod_changed
-from api import get_user_id
 
 
 def get_user_id(username, api):
@@ -17,7 +16,7 @@ def get_user_id(username, api):
         str: a twitch user id
     """
     user_info = api.get_users(logins=[username])
-    return user_info.id
+    return user_info['data'][0]['id']
 
 
 appClientID = '82q4j9gu5ix9edk6ig1w5215aspf0c'
@@ -32,17 +31,15 @@ twitch.authenticate_app([])
 # get OAuth user token
 # for refreshing user tokens, look here: https://github.com/Teekeks/pyTwitchAPI#user-authentication
 auth = UserAuthenticator(twitch, authScopes)
-pprint(auth)
 
 token, refresh_token = auth.authenticate()  # this will open a webpage
 twitch.set_user_authentication(token, authScopes)  # set the user authentication so any api call will also use it
-pprint(token)
 
 # set up the Webhook 
 hook = TwitchWebHook("https://charliejuliet.us", appClientID, 8080)
 hook.authenticate(token) 
 
-#userID = get_user_id(input('Enter your twitch username: '), twitch)
+userID = get_user_id(input('Enter your twitch username: '), twitch)
 
 # the hook has to run before you subscribe to any events since the twitch api will do a handshake this this webhook as soon as you subscribe
 hook.start()
