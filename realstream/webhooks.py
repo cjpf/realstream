@@ -42,8 +42,6 @@ twitch.set_user_authentication(token, authScopes)  # set the user authentication
 hook = TwitchWebHook("https://charliejuliet.us", appClientID, 8080)
 hook.authenticate(token) 
 
-userID = get_user_id(input('Enter your twitch username: '), twitch)
-
 # the hook has to run before you subscribe to any events since the twitch api will do a handshake this this webhook as soon as you subscribe
 hook.start()
 
