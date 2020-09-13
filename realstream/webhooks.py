@@ -28,6 +28,9 @@ authScopes = [AuthScope.USER_READ_EMAIL, AuthScope.CHANNEL_READ_SUBSCRIPTIONS, A
 twitch = Twitch(appClientID, appSecret)
 twitch.authenticate_app([])
 
+# Get user ID
+userID = get_user_id(input('Enter your twitch username: '), twitch)
+
 # get OAuth user token
 # for refreshing user tokens, look here: https://github.com/Teekeks/pyTwitchAPI#user-authentication
 auth = UserAuthenticator(twitch, authScopes)
