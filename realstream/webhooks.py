@@ -21,15 +21,10 @@ def get_user_id(username, api):
 
 appClientID = '82q4j9gu5ix9edk6ig1w5215aspf0c'
 appSecret = 'h7zjcsjcnz2na2mqblyrxwlo6vhs71' # TODO Obfuscate app secret
-#userID = '132493495' # TODO Get User ID via twitch API
 authScopes = [AuthScope.USER_READ_EMAIL, AuthScope.CHANNEL_READ_SUBSCRIPTIONS, AuthScope.MODERATION_READ, AuthScope.CHAT_READ]
-
-# basic twitch API authentication, this will yield a app token but not a user token
 twitch = Twitch(appClientID, appSecret)
-twitch.authenticate_app([])
-
-# Get user ID
-userID = get_user_id(input('Enter your twitch username: '), twitch)
+twitch.authenticate_app([])  # get app token
+userID = get_user_id(input('Enter your twitch username: '), twitch) # get user id
 
 # get OAuth user token
 # for refreshing user tokens, look here: https://github.com/Teekeks/pyTwitchAPI#user-authentication
