@@ -1,37 +1,32 @@
-from twitchAPI import UserAuthenticator
 from twitchAPI.types import AuthScope
 from twitchAPI.webhook import TwitchWebHook
 from pprint import pprint
 from callbacks import callback_ban_changed, callback_mod_changed
-from twitch_app import authenticate
-from auth_scopes import authScopes
+from twitch_app import app_authenticate, user_authenticate
 
-def get_user_id(username, api):
+def get_user_id(username, twitch):
     """Returns a user ID
 
     Args:
         username (str): a twitch username
+        twitch (twitchAPI.Twitch): an authenticated Twitch API Client Object
 
     Returns:
         str: a twitch user id
     """
-    user_info = api.get_users(logins=[username])
+    user_info = twitch.get_users(logins=[username])
     return user_info['data'][0]['id']
 
 
 def main():
     # get app token
-    twitch = authenticate()
+    twitch = app_authenticate()
     
     # get user id
     userID = get_user_id(input('Enter your twitch username: '), twitch)
 
     # get OAuth user token
-    # for refreshing user tokens, look here: https://github.com/Teekeks/pyTwitchAPI#user-authentication
-    auth = UserAuthenticator(twitch, authScopes)
-
-    token, refresh_token = auth.authenticate()  # this will open a webpage
-    twitch.set_user_authentication(token, authScopes)  # set the user authentication so any api call will also use it
+    token, refresh_token = user_authenticate(twitch)
 
     # set up the Webhook 
     hook = TwitchWebHook("https://charliejuliet.us", appClientID, 8080)
