@@ -57,11 +57,11 @@ async def rotate_hue(light, start):
 
 async def breathe(light, min_bri = 1, max_bri = 254, step = 2, wait = 0.15):
     # TODO Error Handling
-    print("Breathing Light: {}".format(light.name))
-    print("Min Brightness: {}".format(min_bri))
-    print("Max Brightness: {}".format(max_bri))
-    print("Step Value: {}".format(step))
-    print("Wait Value: {}".format(wait))
+    print('Breathing Light: {}'.format(light.name))
+    print('Min Brightness: {}'.format(min_bri))
+    print('Max Brightness: {}'.format(max_bri))
+    print('Step Value: {}'.format(step))
+    print('Wait Value: {}'.format(wait))
     light.brightness = 1
     start = min_bri
     while True:
@@ -73,7 +73,8 @@ async def breathe(light, min_bri = 1, max_bri = 254, step = 2, wait = 0.15):
         for i in range(max_bri,min_bri,step):
             print(i)
             await asyncio.sleep(wait)
-            light.brightness = i    
+            light.brightness = i
+        step *= -1
 
 
 async def rotate_saturation(light, start):
@@ -85,47 +86,22 @@ async def rotate_saturation(light, start):
             light.saturation = i
         start = 1
 
+
 async def main():
     bridge = get_bridge('192.168.1.93')
     allLights = get_lights_list(bridge)
-    lights = filter_lights_list(allLights, "Fan")
+    lights = filter_lights_list(allLights, 'strip')
+    lights += filter_lights_list(allLights, 'Lamp')
 
     tasks = []
-    for l in lights:
+    for l in allLights:
         print(l.brightness)
-        task = asyncio.create_task(breathe(l, 20, 254, 1, 10))
+        task = asyncio.create_task(breathe(l, 10, 254, 10, 0.2))
         tasks.append(task)
 
     for t in tasks:
         await t
 
 
-
 if __name__ == '__main__':
     asyncio.run(main())
-
-
-
-
-
-
-
-
-
-# # Static Red (light 3)
-# redLight = b.get_light(4)
-# redLight.on = True
-# redLight.brightness = 254
-# redLight.
-
-# # Blinking Green (light 4)
-# b.set_light(3, 'on', False)
-
-
-# while True:
-#     b.set_light(3, 'on', True)
-#     b.set_light(4, 'on', True)
-#     time.sleep(2)
-#     b.set_light(3, 'on', False)
-#     b.set_light(4, 'on', False)
-#     time.sleep(2)
